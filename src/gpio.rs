@@ -206,6 +206,20 @@ macro_rules! gpio {
                     )+
                 }
 
+                impl Parts {
+                    pub fn clk(&self) -> GpioClk {
+                        GpioClk
+                    }
+                }
+
+                pub struct GpioClk;
+
+                impl GpioClk {
+                    pub fn disable(&mut self, rcc: &mut Rcc) {
+                        rcc.regs.ahbenr.modify(|_, w| w.$iopxenr().clear_bit());
+                    }
+                }
+
                 impl GpioExt for $GPIOX {
                     type Parts = Parts;
 
